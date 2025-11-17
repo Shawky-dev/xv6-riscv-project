@@ -11,17 +11,13 @@ int main(int argc, char *argv[])
   int f1 = open(argv[argv_f1], O_RDONLY);
   if (f1 < 0)
   {
-    write(1, "error opening source file: ", 21);
-    write(1, argv[argv_f1], strlen(argv[argv_f1]));
-    write(1, "\n", 1);
+    printf("error opening source file: %s\n", argv[argv_f1]);
   }
   // open dest file
-  int f2 = open(argv[argv_f2], O_CREATE | O_WRONLY | O_TRUNC); // bitwise operation to do all 3, since 3 are binary values all 3 condtion will be tru
+  int f2 = open(argv[argv_f2], O_CREATE | O_WRONLY | O_TRUNC);
   if (f2 < 0)
   {
-    write(1, "error opening dest file: ", 21);
-    write(1, argv[argv_f2], strlen(argv[argv_f2]));
-    write(1, "\n", 1);
+    printf("error opening dest file: %s\n", argv[argv_f2]);
   }
 
   char buf[512];
@@ -31,9 +27,7 @@ int main(int argc, char *argv[])
   {
     if (write(f2, buf, n) != n)
     {
-      write(1, "error coping data to  dest file: ", 21);
-      write(1, argv[argv_f2], strlen(argv[argv_f2]));
-      write(1, "\n", 1);
+      printf("error copying data to dest file: %s\n", argv[argv_f2]);
     }
   }
 
