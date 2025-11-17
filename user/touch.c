@@ -10,9 +10,9 @@ main(int argc, char *argv[])
   int i;
 
   for(i = 1; i < argc; i++){
-    int fd = open(argv[i],O_CREATE | O_RDWR);
+    int fd = open(argv[i],O_CREATE | O_RDWR); //O_RDWR for future implmentation of timestamps if possible
     if (fd < 0){
-      write(1,"error creating file: ",21);
+      write(1,"error creating file: ",21); //21 cause message is 21 bytes
       write(1, argv[i], strlen(argv[i]));
       write(1, "\n", 1);
     }else{
