@@ -11,5 +11,16 @@
     "editor.trimAutoWhitespace": true,
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    // --- C/C++ unified formatter config ---
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[c]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    // disable built-in Microsoft C/C++ formatter
+    "C_Cpp.formatting": "Disabled",
+    // automatically format on save
+    "editor.formatOnSave": true
 }
