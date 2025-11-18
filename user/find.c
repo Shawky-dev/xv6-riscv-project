@@ -4,10 +4,11 @@
 #include "kernel/fs.h"
 
 char* get_filename(char* path) {
-    char* p;
-    // Find the last '/' in the path
-    for (p = path + strlen(path); p >= path && *p != '/'; p--)
-        ;
+    char* p = path + strlen(path);
+
+    while(p >= path && *p != '/')
+      p--;
+
     p++;
     return p;
 }
@@ -19,25 +20,24 @@ void find(char* path, char* name) {
     struct stat st;
 
     if ((fd = open(path, 0)) < 0) {
-        fprintf(2, "find: cannot open %s\n", path);
-        return;
+        printf("find: cannot open %s\n", path);
+        exit(0);
     }
 
     if (fstat(fd, &st) < 0) {
-        fprintf(2, "find: cannot stat %s\n", path);
+        printf("find: cannot stat %s\n", path);
         close(fd);
-        return;
+        exit(0);
     }
 
     switch(st.type) {
         case T_FILE:
-            if (strcmp(get_filename(path), name) == 0) {
+            if (strcmp(get_filename(path), name) == 0)
                 printf("%s\n", path);
-            }
             break;
 
         case T_DIR:
-            if (strlen(path) + 1 + DIRSIZ + 1 > sizeof buf) {
+            if (strlen(path) + 1 + DIRSIZ + 1 > sizeof(buf)) {
                 printf("find: path too long\n");
                 break;
             }
@@ -45,10 +45,8 @@ void find(char* path, char* name) {
             p = buf + strlen(buf);
             *p++ = '/';
             while (read(fd, &de, sizeof(de)) == sizeof(de)) {
-                if (de.inum == 0)
-                    continue;
-                if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
-                    continue;
+                if (de.inum == 0) continue;
+                if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0) continue;
                 memmove(p, de.name, DIRSIZ);
                 p[DIRSIZ] = 0;
                 find(buf, name);
@@ -59,9 +57,9 @@ void find(char* path, char* name) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        fprintf(2, "Usage: find <directory> <filename>\n");
-        exit(1);
+    if (argc != 3 || (argc == 2 && strcmp(argv[1],"?") == 0)) {
+        printf("Usage: find <directory> <filename>\n");
+        exit(0);
     }
 
     find(argv[1], argv[2]);
