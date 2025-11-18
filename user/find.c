@@ -1,40 +1,68 @@
-#include "kernel/fcntl.h"
 #include "kernel/types.h"
-#include "user/user.h"
-
-#include "kernel/fs.h"
 #include "kernel/stat.h"
+#include "user/user.h"
+#include "kernel/fs.h"
 
-void print_stat(struct stat *st) {
-    printf("dev:   %d\n", st->dev);
-    printf("ino:   %d\n", st->ino);
-    printf("type:  %d\n", st->type);
-    printf("nlink: %d\n", st->nlink);
-    printf("size:  %lu\n", st->size);  // <<< fix
+char* get_filename(char* path) {
+    char* p;
+    // Find the last '/' in the path
+    for (p = path + strlen(path); p >= path && *p != '/'; p--)
+        ;
+    p++;
+    return p;
 }
 
-
-int main(int argc, char *argv[]) {
+void find(char* path, char* name) {
+    char buf[512], *p;
     int fd;
-    char *path = argv[1];
     struct dirent de;
     struct stat st;
 
     if ((fd = open(path, 0)) < 0) {
-        printf("find: cannot open %s\n", path);
-        exit(0);
-    } else {
-        printf("find: file %s opened\n", path);
-
-        if (fstat(fd, &st) < 0) {
-            printf("find: cannot stat %s\n", path);
-            close(fd);
-            exit(0);
-        }
-
-        print_stat(&st);
-        close(fd);
-
-        exit(0);
+        fprintf(2, "find: cannot open %s\n", path);
+        return;
     }
+
+    if (fstat(fd, &st) < 0) {
+        fprintf(2, "find: cannot stat %s\n", path);
+        close(fd);
+        return;
+    }
+
+    switch(st.type) {
+        case T_FILE:
+            if (strcmp(get_filename(path), name) == 0) {
+                printf("%s\n", path);
+            }
+            break;
+
+        case T_DIR:
+            if (strlen(path) + 1 + DIRSIZ + 1 > sizeof buf) {
+                printf("find: path too long\n");
+                break;
+            }
+            strcpy(buf, path);
+            p = buf + strlen(buf);
+            *p++ = '/';
+            while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+                if (de.inum == 0)
+                    continue;
+                if (strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
+                    continue;
+                memmove(p, de.name, DIRSIZ);
+                p[DIRSIZ] = 0;
+                find(buf, name);
+            }
+            break;
+    }
+    close(fd);
+}
+
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
+        fprintf(2, "Usage: find <directory> <filename>\n");
+        exit(1);
+    }
+    find(argv[1], argv[2]);
+    exit(0);
 }
