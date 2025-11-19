@@ -128,6 +128,8 @@ UPROGS=\
 	$U/_find\
 	$U/_mv\
 	$U/_diff\
+	$U/_touch\
+	$U/_cp\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\
@@ -142,8 +144,7 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_touch\
-	$U/_cp\
+
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
