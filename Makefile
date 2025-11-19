@@ -70,6 +70,9 @@ CFLAGS += -fno-builtin-memcpy -Wno-main
 CFLAGS += -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf
 CFLAGS += -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
+#used for datetime syscall by recording unix timestao at boot
+CFLAGS += -DBOOT_EPOCH=$(shell date +%s)
+
 
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
@@ -129,6 +132,7 @@ UPROGS=\
 	$U/_add\
 	$U/_fact\
 	$U/_randTest\
+	$U/_datetime\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\
@@ -171,6 +175,8 @@ QEMUOPTS = -machine virt -bios none -kernel $K/kernel -m 128M -smp $(CPUS) -nogr
 QEMUOPTS += -global virtio-mmio.force-legacy=false
 QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
 QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+
+
 
 qemu: $K/kernel fs.img
 	$(QEMU) $(QEMUOPTS)
