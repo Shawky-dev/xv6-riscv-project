@@ -127,6 +127,7 @@ UPROGS=\
 	$U/_echo\
 	$U/_add\
 	$U/_fact\
+	$U/_randTest\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\
