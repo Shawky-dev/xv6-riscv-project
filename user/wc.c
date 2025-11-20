@@ -29,13 +29,21 @@ void wc(int fd, char *name, int show_l, int show_w, int show_c)
     }
   }
   if (n < 0)
-    if (show_l)
-      printf("l: %s ", l);
-  if (show_w)
-    printf("w: %s ", w);
-  if (show_c)
-    printf("c: %s ", c);
-  printf("name: %s\n", name);
+  {
+    printf("wc: read error\n");
+    exit(1);
+  }
+  else
+  {
+
+    if (1)
+      printf("l: %d ", l);
+    if (show_w)
+      printf("w: %d ", w);
+    if (show_c)
+      printf("c: %d ", c);
+    printf("name:%s\n", name);
+  }
 }
 
 int main(int argc, char *argv[])
