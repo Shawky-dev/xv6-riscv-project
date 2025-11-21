@@ -21,7 +21,7 @@ main(int argc, char *argv[])
   }
 
   //convert argument to integer
-  int num = atoi(argv[1]);
+  uint64 num = atoi(argv[1]);
 
   //check for negative input
   if(num < 0)
@@ -32,7 +32,7 @@ main(int argc, char *argv[])
 
 
   //calculate factorial
-  int result = 1;
+  uint64 result = 1;
   if(num == 0)
   {
     result = 1;
@@ -45,7 +45,7 @@ main(int argc, char *argv[])
   }
   }
 
-  printf("The factorial of %d is %d\n", num, result);
+  printf("The factorial of %lu is %lu\n", num, result);
 
   exit(0);
 }

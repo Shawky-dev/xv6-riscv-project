@@ -13,6 +13,8 @@
     "files.trimFinalNewlines": true,
     "files.insertFinalNewline": true,
     "files.associations": {
-        "riscv.h": "c"
+        "riscv.h": "c",
+        "stat.h": "c",
+        "types.h": "c"
     }
 }
