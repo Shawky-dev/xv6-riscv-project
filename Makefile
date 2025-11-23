@@ -28,6 +28,7 @@ OBJS = \
   $K/sysfile.o \
   $K/kernelvec.o \
   $K/plic.o \
+  $K/sysutil.o \
   $K/virtio_disk.o
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
@@ -127,9 +128,11 @@ UPROGS=\
 	$U/_echo\
 	$U/_find\
 	$U/_mv\
+	$U/_ps\
 	$U/_diff\
 	$U/_touch\
 	$U/_cp\
+	$U/_countsyscall\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\

@@ -22,6 +22,15 @@ sys_getpid(void)
 }
 
 uint64
+sys_getppid(void)
+{
+  struct proc *p = myproc();
+  int ppid;
+  ppid = p->parent->pid;
+  return ppid;
+}
+
+uint64
 sys_fork(void)
 {
   return fork();
