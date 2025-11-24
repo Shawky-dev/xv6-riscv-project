@@ -21,12 +21,18 @@ sys_getpid(void)
   return myproc()->pid;
 }
 
+extern struct spinlock wait_lock;
+
 uint64
 sys_getppid(void)
 {
   struct proc *p = myproc();
   int ppid;
+
+  acquire(&wait_lock);
   ppid = p->parent->pid;
+  release(&wait_lock);
+
   return ppid;
 }
 
