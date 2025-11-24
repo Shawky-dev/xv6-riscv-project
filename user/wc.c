@@ -56,6 +56,11 @@ int main(int argc, char *argv[])
   int show_words = 0; //-w
   int show_chars = 0; //-c
 
+  if (argc == 1)
+  {
+    printf("wc: expected more arguments\n");
+    exit(1);
+  }
   // int show_longes_line_length = 0; //-L
 
   // parse the flags if present
