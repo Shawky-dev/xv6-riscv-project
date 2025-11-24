@@ -152,6 +152,7 @@ UPROGS=\
 	$U/_cp\
 	$U/_kbdint\
 	$U/_uptime\
+	$U/_sleep\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
