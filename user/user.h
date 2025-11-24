@@ -1,4 +1,20 @@
 struct stat;
+struct procinfo;
+
+struct procinfo{
+  int pid;
+  int ppid;
+  int state;
+  char name[16];
+  uint64 sz;
+};
+
+#define UNUSED    0
+#define USED      1
+#define SLEEPING  2
+#define RUNNABLE  3
+#define RUNNING   4
+#define ZOMBIE    5
 
 // system calls
 int fork(void);
@@ -24,6 +40,7 @@ int sleep(int);
 int uptime(void);
 int countsyscall(void);
 int getppid(void);
+int getptable(int, struct procinfo*);
 
 // ulib.c
 int stat(const char*, struct stat*);

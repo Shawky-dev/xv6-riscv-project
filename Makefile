@@ -129,6 +129,7 @@ UPROGS=\
 	$U/_find\
 	$U/_mv\
 	$U/_ps\
+	$U/_pstable\
 	$U/_diff\
 	$U/_touch\
 	$U/_cp\

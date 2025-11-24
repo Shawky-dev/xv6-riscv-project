@@ -106,3 +106,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_getptable(void)
+{
+  int nproc;
+  uint64 buffer;
+
+  argint(0, &nproc);
+  argaddr(1, &buffer);
+
+  return getptable(nproc, (char *)buffer);
+}

@@ -693,3 +693,50 @@ procdump(void)
     printf("\n");
   }
 }
+
+extern struct spinlock wait_lock;
+
+int getptable(int nproc, char *buffer)
+{
+  struct proc *p;
+  struct procinfo pinfo;
+  int count = 0;
+
+  if(nproc < 1)
+    return 0;
+
+  for(p = proc; p < &proc[NPROC]; p++)
+  {
+    acquire(&p->lock);
+
+    if(p->state == UNUSED)
+    {
+      release(&p->lock);
+      continue;
+    }
+
+    if(count >= nproc)
+    {
+      release(&p->lock);
+      break;
+    }
+
+    pinfo.pid = p->pid;
+
+    acquire(&wait_lock);
+    pinfo.ppid = (p->parent) ? p->parent->pid : 0;
+    release(&wait_lock);
+
+    pinfo.state = p->state;
+    safestrcpy(pinfo.name, p->name, sizeof(p->name));
+    pinfo.sz = p->sz;
+
+    release(&p->lock);
+
+    if(copyout(myproc()->pagetable, (uint64)(buffer + count * sizeof(struct procinfo)), (char *)&pinfo, sizeof(struct procinfo)) < 0)
+      return 0;
+
+    count++;
+  }
+  return 1;
+}
