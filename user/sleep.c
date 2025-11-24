@@ -10,6 +10,6 @@ int main(int argc, char *argv[])
   }
 
   int ticks = atoi(argv[1]);
-  sleep(ticks);
+  sleep(ticks * 10);
   exit(0);
 }
