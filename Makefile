@@ -143,6 +143,7 @@ UPROGS=\
 	$U/_touch\
 	$U/_cp\
 	$U/_kbdint\
+	$U/_uptime\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
