@@ -133,6 +133,7 @@ UPROGS=\
 	$U/_diff\
 	$U/_touch\
 	$U/_cp\
+	$U/_shutdown\
 	$U/_countsyscall\
 	$U/_forktest\
 	$U/_grep\

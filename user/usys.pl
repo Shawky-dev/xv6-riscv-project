@@ -39,3 +39,4 @@ entry("uptime");
 entry("countsyscall");
 entry("getppid");
 entry("getptable");
+entry("shutdown");
