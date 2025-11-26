@@ -39,3 +39,7 @@ entry("uptime");
 entry("kbdint");
 entry("myrand");
 entry("datetime");
+entry("countsyscall");
+entry("getppid");
+entry("getptable");
+entry("shutdown");

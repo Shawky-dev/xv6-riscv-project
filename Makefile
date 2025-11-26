@@ -29,6 +29,7 @@ OBJS = \
   $K/sysfile.o \
   $K/kernelvec.o \
   $K/plic.o \
+  $K/sysutil.o \
   $K/virtio_disk.o\
   $K/syskbdint.o
 
@@ -134,6 +135,15 @@ UPROGS=\
 	$U/_fact\
 	$U/_randTest\
 	$U/_datetime\
+	$U/_find\
+	$U/_mv\
+	$U/_ps\
+	$U/_pstable\
+	$U/_diff\
+	$U/_touch\
+	$U/_cp\
+	$U/_shutdown\
+	$U/_countsyscall\
 	$U/_forktest\
 	$U/_grep\
 	$U/_init\

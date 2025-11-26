@@ -97,6 +97,10 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_link(void);
 extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
+extern uint64 sys_countsyscall(void);
+extern uint64 sys_getppid(void);
+extern uint64 sys_getptable(void);
+extern uint64 sys_shutdown(void);
 extern uint64 sys_kbdint(void);
 extern uint64 sys_myrand(void);
 extern uint64 sys_datetime(void);
@@ -124,12 +128,18 @@ static uint64 (*syscalls[])(void) = {
     [SYS_unlink] sys_unlink,
     [SYS_link] sys_link,
     [SYS_mkdir] sys_mkdir,
+    [SYS_countsyscall] sys_countsyscall,
+    [SYS_getppid] sys_getppid,
+    [SYS_getptable] sys_getptable,
+    [SYS_shutdown] sys_shutdown,
     [SYS_close] sys_close,
     [SYS_kbdint] sys_kbdint,
 
     [SYS_myrand] sys_myrand,
     [SYS_datetime] sys_datetime,
 };
+
+int syscall_count = 0;
 
 void syscall(void)
 {
@@ -141,6 +151,7 @@ void syscall(void)
   {
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
+    syscall_count++;
     p->trapframe->a0 = syscalls[num]();
   }
   else

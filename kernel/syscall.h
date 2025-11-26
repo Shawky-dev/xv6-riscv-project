@@ -23,3 +23,7 @@
 #define SYS_kbdint 22
 #define SYS_myrand 23
 #define SYS_datetime 24
+#define SYS_countsyscall 25
+#define SYS_getppid 26
+#define SYS_getptable 27
+#define SYS_shutdown 28
