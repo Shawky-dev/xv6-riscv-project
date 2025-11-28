@@ -135,6 +135,7 @@ UPROGS=\
 	$U/_randTest\
 	$U/_datetime\
 	$U/_find\
+	$U/_tail\
 	$U/_mv\
 	$U/_ps\
 	$U/_pstable\

@@ -5,6 +5,11 @@
 
 int main(int argc, char *argv[])
 {
+  if(argc != 3 || (argc == 2 && strcmp(argv[1], "?") == 0)){
+    printf("Usage: cp <filedirectory> <filedirectory>\n");
+    exit(1);
+  }
+
   int argv_f1 = 1;
   int argv_f2 = 2;
   // open source file
