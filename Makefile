@@ -136,6 +136,8 @@ UPROGS=\
 	$U/_datetime\
 	$U/_find\
 	$U/_tail\
+	$U/_scht\
+	$U/_schbench\
 	$U/_mv\
 	$U/_ps\
 	$U/_pstable\
