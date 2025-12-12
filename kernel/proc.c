@@ -157,6 +157,7 @@ found:
 	// initialize new variables here
   p->creation_time = ticks;
   p->run_time = 0;
+  p->arrival_time = ticks;  // Set arrival_time only once at process creation
 
   return p;
 }
@@ -265,7 +266,6 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
-  p->arrival_time = ticks;
 
   release(&p->lock);
 }
@@ -336,7 +336,6 @@ fork(void)
 
   acquire(&np->lock);
   np->state = RUNNABLE;
-  np->arrival_time = ticks;
   release(&np->lock);
 
   return pid;
@@ -466,9 +465,8 @@ update_time()
   }
 }
 
-int sched_mode = SCHED_ROUND_ROBIN;  // Assign the chosen scheduler here
+int sched_mode = SCHED_FCFS;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
-
   struct proc *p;
   struct proc *fcfs_candidate = 0;
 
@@ -476,23 +474,43 @@ struct proc *choose_next_process() {
     for(p = proc; p < &proc[NPROC]; p++) {
       if (p->state == RUNNABLE)
         return p;
-      }
+    }
   }
   else if (sched_mode == SCHED_FCFS) {
-      // Find RUNNABLE process with smallest jPID
-        for(p = proc; p < &proc[NPROC]; p++) {
-            if (p->state == RUNNABLE) {
-              if (fcfs_candidate == 0 || p->arrival_time < fcfs_candidate->arrival_time) {
-                  fcfs_candidate = p;
-              }
-            }
+    // Find RUNNABLE process with smallest creation_time
+    for(p = proc; p < &proc[NPROC]; p++) {
+      if (p->state == RUNNABLE) {
+        // Debug: Print what we're considering
+        // UNCOMMENT THESE FOR DEBUGGING:
+        // printf("[FCFS] considering pid=%d ctime=%d\n", p->pid, p->creation_time);
+
+        if (fcfs_candidate == 0) {
+          fcfs_candidate = p;
+          // printf("[FCFS] first candidate: pid=%d ctime=%d\n", p->pid, p->creation_time);
         }
-        return fcfs_candidate;
+        else if (p->creation_time < fcfs_candidate->creation_time) {
+          // printf("[FCFS] new candidate: pid=%d ctime=%d (better than pid=%d ctime=%d)\n",p->pid, p->creation_time, fcfs_candidate->pid, fcfs_candidate->creation_time);
+          fcfs_candidate = p;
+        }
+        else if (p->creation_time == fcfs_candidate->creation_time &&
+                 p->pid < fcfs_candidate->pid) {
+          fcfs_candidate = p;
+        }
+      }
+    }
+
+    // Debug: Print what we chose
+    // UNCOMMENT FOR DEBUGGING:
+    // if (fcfs_candidate) {
+    //   printf("[FCFS] chose pid=%d ctime=%d\n", fcfs_candidate->pid, fcfs_candidate->creation_time);
+    // }
+
+    return fcfs_candidate;
   }
 
-  // Add more else statements each time you create a new scheduler
+  // Add more scheduler types here as needed
 
-  return 0;
+  return 0;  // No runnable process found
 }
 
 
@@ -618,7 +636,6 @@ yield(void)
   struct proc *p = myproc();
   acquire(&p->lock);
   p->state = RUNNABLE;
-  p->arrival_time = ticks;
   sched();
   release(&p->lock);
 }
@@ -680,8 +697,7 @@ sleep(void *chan, struct spinlock *lk)
 
 // Wake up all processes sleeping on chan.
 // Must be called without any p->lock.
-void
-wakeup(void *chan)
+void wakeup(void *chan)
 {
   struct proc *p;
 
@@ -690,7 +706,9 @@ wakeup(void *chan)
       acquire(&p->lock);
       if(p->state == SLEEPING && p->chan == chan) {
         p->state = RUNNABLE;
-        p->arrival_time = ticks;
+
+        // DEBUG: Uncomment to see when processes wake
+        // printf("[wakeup] pid=%d ctime=%d now RUNNABLE\n", p->pid, p->creation_time);
       }
       release(&p->lock);
     }
@@ -712,7 +730,7 @@ kill(int pid)
       if(p->state == SLEEPING){
         // Wake process from sleep().
         p->state = RUNNABLE;
-        p->arrival_time = ticks;
+        // Remove: p->arrival_time = ticks;  (strict FCFS doesn't reset on kill/wakeup)
       }
       release(&p->lock);
       return 0;

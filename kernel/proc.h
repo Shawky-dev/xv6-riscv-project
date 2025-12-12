@@ -106,7 +106,7 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   uint creation_time;          // Ticks when process was created
-  uint arrival_time;           //Tick where the process switched form xstate -> runnable 
+  uint arrival_time;           //Tick where the process switched form xstate -> runnable
   uint run_time;               // How long the process has run
 };
 
@@ -127,5 +127,14 @@ struct procinfo{
 #define SCHED_FCFS        1
 
 extern int sched_mode;  // Declare global scheduler mode
+
+// Ready queue for FCFS scheduler
+extern struct proc *ready_queue[NPROC];
+extern int rq_head;
+extern int rq_tail;
+extern struct spinlock rq_lock;
+
+void enqueue(struct proc *p);
+struct proc* dequeue(void);
 
 int getprocindex(void);
