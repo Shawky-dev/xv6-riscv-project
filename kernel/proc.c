@@ -265,6 +265,7 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
+  p->arrival_time = ticks;
 
   release(&p->lock);
 }
@@ -335,6 +336,7 @@ fork(void)
 
   acquire(&np->lock);
   np->state = RUNNABLE;
+  np->arrival_time = ticks;
   release(&np->lock);
 
   return pid;
@@ -477,12 +479,12 @@ struct proc *choose_next_process() {
       }
   }
   else if (sched_mode == SCHED_FCFS) {
-      // Find RUNNABLE process with smallest PID
+      // Find RUNNABLE process with smallest jPID
         for(p = proc; p < &proc[NPROC]; p++) {
             if (p->state == RUNNABLE) {
-                if (fcfs_candidate == 0 || p->pid < fcfs_candidate->pid) {
-                    fcfs_candidate = p;
-                }
+              if (fcfs_candidate == 0 || p->arrival_time < fcfs_candidate->arrival_time) {
+                  fcfs_candidate = p;
+              }
             }
         }
         return fcfs_candidate;
@@ -616,6 +618,7 @@ yield(void)
   struct proc *p = myproc();
   acquire(&p->lock);
   p->state = RUNNABLE;
+  p->arrival_time = ticks;
   sched();
   release(&p->lock);
 }
@@ -687,6 +690,7 @@ wakeup(void *chan)
       acquire(&p->lock);
       if(p->state == SLEEPING && p->chan == chan) {
         p->state = RUNNABLE;
+        p->arrival_time = ticks;
       }
       release(&p->lock);
     }
@@ -708,6 +712,7 @@ kill(int pid)
       if(p->state == SLEEPING){
         // Wake process from sleep().
         p->state = RUNNABLE;
+        p->arrival_time = ticks;
       }
       release(&p->lock);
       return 0;
