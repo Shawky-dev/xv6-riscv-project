@@ -21,6 +21,13 @@ sys_getpid(void)
   return myproc()->pid;
 }
 
+uint64
+sys_getprocindex(void)
+{
+  return getprocindex();
+}
+
+
 extern struct spinlock wait_lock;
 
 uint64

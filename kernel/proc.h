@@ -125,3 +125,5 @@ struct procinfo{
 #define SCHED_FCFS        1
 
 extern int sched_mode;  // Declare global scheduler mode
+
+int getprocindex(void);

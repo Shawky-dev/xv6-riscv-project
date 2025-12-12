@@ -89,6 +89,14 @@ myproc(void)
   return p;
 }
 
+//gets the current process index in the 'proc' array
+int
+getprocindex(void)
+{
+  struct proc *p = myproc();
+  return (int)(p - proc);
+}
+
 int
 allocpid()
 {

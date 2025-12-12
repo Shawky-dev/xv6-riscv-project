@@ -27,8 +27,8 @@ int main(int argc, char *argv[]) {
     else if (pid == 0) {
       // child
       int child_start = uptime();
-      printf("[pid=%d] created at tick %d\n", getpid(), child_start);
-
+      printf("[pid=%d] [index=%d] created at tick %d\n",
+            getpid(), getprocindex(), child_start);
       for (z = 0; z < steps; z += 1) {
          // copy buffers one inside the other and back
          // used for wasting cpu time
@@ -37,8 +37,8 @@ int main(int argc, char *argv[]) {
       }
 
       int child_end = uptime();
-      printf("[pid=%d] finished at tick %d (duration: %d)\n",
-             getpid(), child_end, child_end - child_start);
+      printf("[pid=%d] [index=%d] finished at tick %d (duration: %d)\n",
+       getpid(), getprocindex(), child_end, child_end - child_start);
       exit(0);
     }
   }

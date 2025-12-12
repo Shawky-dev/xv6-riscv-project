@@ -42,4 +42,5 @@ entry("datetime");
 entry("countsyscall");
 entry("getppid");
 entry("getptable");
+entry("getprocindex");
 entry("shutdown");
