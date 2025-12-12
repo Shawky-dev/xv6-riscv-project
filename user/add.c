@@ -11,16 +11,15 @@ main(int argc, char *argv[])
 
   //check if user needs help
   //reminder strcmp returns 0 if strings are equal
-  if(argc == 2 && strcmp(argv[1], "?") == 0)
+  if((argc == 2 && strcmp(argv[1], "?") == 0))
   {
-    printf("Usage: add number1 number2\n");
+    printf("Usage: add <number1> <number2>\n");
     exit(0);
   }
 
-  //check for correct number of arguments
-  if(argc != 3)
+  if (argc != 3)
   {
-    printf("Error: Expected 3 arguments, got %d\n", argc - 1);
+    printf("Error: Command takes 2 argument\n");
     exit(1);
   }
 

@@ -2,14 +2,13 @@
 #include<kernel/stat.h>
 #include<user/user.h>
 
-//command to calulcate factorial of a number
 int
 main(int argc, char *argv[])
 {
   //check if user needs help
   if(argc == 2 && strcmp(argv[1], "?") == 0)
   {
-    printf("Usage: fact number\n");
+    printf("Usage: fact <number>\n");
     exit(0);
   }
 

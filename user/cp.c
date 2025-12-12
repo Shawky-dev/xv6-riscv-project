@@ -5,8 +5,15 @@
 
 int main(int argc, char *argv[])
 {
-  if(argc != 3 || (argc == 2 && strcmp(argv[1], "?") == 0)){
+  if((argc == 2 && strcmp(argv[1], "?") == 0))
+  {
     printf("Usage: cp <filedirectory> <filedirectory>\n");
+    exit(0);
+  }
+
+  if (argc != 3)
+  {
+    printf("Error: Command takes 2 argument\n");
     exit(1);
   }
 
