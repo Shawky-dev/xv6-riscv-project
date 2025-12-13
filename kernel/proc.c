@@ -496,19 +496,27 @@ update_time()
   }
 }
 
-int sched_mode = SCHED_ROUND_ROBIN;  // Assign the chosen scheduler here
-struct proc *choose_next_process() {
+int sched_mode = SCHED_ROUND_ROBIN;
+static int rr_index = 0; // Assign the chosen scheduler here
+struct proc *choose_next_process()
+{
   struct proc *p;
   struct proc *fcfs_candidate = 0;
   struct proc *priority_candidate = 0;
 
-  if(sched_mode == SCHED_ROUND_ROBIN)
+  if (sched_mode == SCHED_ROUND_ROBIN)
   {
-
-    for(p = proc; p < &proc[NPROC]; p++) {
+    for (int i = 0; i < NPROC; i++)
+    {
+      int idx = (rr_index + i) % NPROC;
+      p = &proc[idx];
       if (p->state == RUNNABLE)
+      {
+        rr_index = (idx + 1) % NPROC; // rotate
         return p;
+      }
     }
+    return 0;
   }
   else if (sched_mode == SCHED_FCFS ) {
 
@@ -599,7 +607,6 @@ struct proc *choose_next_process() {
 
   return 0;  // No runnable process found
 }
-
 
 void
 scheduler(void)
