@@ -29,7 +29,7 @@ main(int argc, char *argv[])
   }
   else
   {
-    printf("Current Date and time is\n date: %d-%d-%d\n time: %d:%d:%d\n",dt.year,dt.month,dt.day,dt.hour,dt.minute,dt.second);
+    printf("Current Date and time is\n date: %d-%d-%d\n time: %d:%d:%d\n",dt.year,dt.month,dt.day,(dt.hour+2),dt.minute,dt.second);
   }
 
   exit(0);

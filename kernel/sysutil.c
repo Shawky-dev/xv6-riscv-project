@@ -8,10 +8,7 @@
 #include "defs.h"
 #include "datetime.h"
 
-// kernel logic for rand syscall
-// LCG equation: Xn+1 = (a * Xn + c) mod m
-// the first x is the seed
-// we can get a seed mtime register or ticks
+
 extern uint ticks;
 
 static unsigned long rand_seed = 1;
@@ -30,6 +27,11 @@ int sys_shutdown(void)
   return 0; // Not reached
 }
 
+
+// kernel logic for rand syscall
+// LCG equation: Xn+1 = (a * Xn + c) mod m
+// the first x is the seed
+// we can get a seed mtime register or ticks
 uint64
 sys_myrand(void)
 {
@@ -155,4 +157,12 @@ sys_datetime(void)
   }
 
   return 0;
+}
+
+extern int kbd_intr_count;
+
+uint64
+sys_kbdint(void)
+{
+  return kbd_intr_count;
 }
