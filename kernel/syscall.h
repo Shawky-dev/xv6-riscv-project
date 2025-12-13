@@ -28,3 +28,4 @@
 #define SYS_getptable 27
 #define SYS_shutdown 28
 #define SYS_getprocindex 29
+#define SYS_schedstats  30

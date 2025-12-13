@@ -44,6 +44,14 @@ sys_getppid(void)
 }
 
 uint64
+sys_schedstats(void)
+{
+  print_sched_stats();
+  return 0;
+}
+
+
+uint64
 sys_fork(void)
 {
   return fork();

@@ -139,6 +139,8 @@ static uint64 (*syscalls[])(void) = {
 
     [SYS_myrand] sys_myrand,
     [SYS_datetime] sys_datetime,
+    [SYS_schedstats]   sys_schedstats,
+
 };
 
 int syscall_count = 0;

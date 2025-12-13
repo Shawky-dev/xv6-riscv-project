@@ -68,3 +68,6 @@ void free(void *);
 
 // kbdint
 int kbdint(void);
+
+//schbench
+int schedstats(void);

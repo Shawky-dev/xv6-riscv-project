@@ -30,8 +30,6 @@ int main(int argc, char *argv[]) {
       printf("[pid=%d] created at tick %d\n", getpid(), child_start);
 
       for (z = 0; z < steps; z += 1) {
-         // copy buffers one inside the other and back
-         // used for wasting cpu time
          memmove(buffer_dst, buffer_src, 1024);
          memmove(buffer_src, buffer_dst, 1024);
       }
@@ -49,6 +47,9 @@ int main(int argc, char *argv[]) {
     termination_times[k] = uptime();
     printf("[pid=%d] terminated at tick %d\n", pid, termination_times[k]);
   }
+
+  // 🔹 NEW: ask kernel to print scheduler statistics
+  schedstats();
 
   end_time = uptime();
   printf("\n=== Scheduling Metrics ===\n");

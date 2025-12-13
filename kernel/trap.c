@@ -77,8 +77,14 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2)
-    yield();
+    if(which_dev == 2){   // timer interrupt
+      struct proc *p = myproc();
+      if(p && p->state == RUNNING){
+        p->run_time++;
+      }
+      yield();
+    }
+
 
   usertrapret();
 }

@@ -106,6 +106,7 @@ struct proc {
   char name[16];               // Process name (debugging)
 
   uint creation_time;          // Ticks when process was created
+  uint exit_time;              // Tick when the process exited
   uint arrival_time;           //Tick where the process switched form xstate -> runnable
   uint run_time;               // How long the process has run
 };

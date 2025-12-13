@@ -44,3 +44,4 @@ entry("getppid");
 entry("getptable");
 entry("getprocindex");
 entry("shutdown");
+entry("schedstats");

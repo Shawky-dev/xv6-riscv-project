@@ -6,6 +6,25 @@
 #include "proc.h"
 #include "defs.h"
 
+uint total_turnaround = 0;
+uint total_waiting = 0;
+uint finished_processes = 0;
+
+void
+print_sched_stats(void)
+{
+  if(finished_processes == 0)
+    return;
+
+  printf("\n=== Scheduler Statistics ===\n");
+  printf("Average Turnaround Time: %d\n",
+          total_turnaround / finished_processes);
+  printf("Average Waiting Time: %d\n",
+          total_waiting / finished_processes);
+}
+
+
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -157,6 +176,7 @@ found:
 	// initialize new variables here
   p->creation_time = ticks;
   p->run_time = 0;
+  p->exit_time = 0;
   p->arrival_time = ticks;  // Set arrival_time only once at process creation
 
   return p;
@@ -363,6 +383,7 @@ void
 exit(int status)
 {
   struct proc *p = myproc();
+  p->exit_time = ticks;
 
   if(p == initproc)
     panic("init exiting");
@@ -390,6 +411,14 @@ exit(int status)
   wakeup(p->parent);
 
   acquire(&p->lock);
+
+  uint turnaround = p->exit_time - p->creation_time;
+  uint waiting = turnaround - p->run_time;
+  total_turnaround += turnaround;
+  total_waiting += waiting;
+  finished_processes++;
+
+
 
   p->xstate = status;
   p->state = ZOMBIE;
