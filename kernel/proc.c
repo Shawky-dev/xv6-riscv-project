@@ -495,12 +495,13 @@ update_time()
   }
 }
 
-int sched_mode = SCHED_FCFS;  // Assign the chosen scheduler here
+int sched_mode = SCHED_ROUND_ROBIN;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
   struct proc *p;
   struct proc *fcfs_candidate = 0;
 
-  if(sched_mode == SCHED_ROUND_ROBIN) {
+  if(sched_mode == SCHED_ROUND_ROBIN)
+  {
     for(p = proc; p < &proc[NPROC]; p++) {
       if (p->state == RUNNABLE)
         return p;

@@ -79,8 +79,16 @@ usertrap(void)
   // give up the CPU if this is a timer interrupt.
     if(which_dev == 2){   // timer interrupt
       struct proc *p = myproc();
-      if(p && p->state == RUNNING){
+      if(p && p->state == RUNNING)
+      {
         p->run_time++;
+        p->quanta_used++;
+        if(sched_mode == SCHED_ROUND_ROBIN){
+          if(p->quanta_used >= QUANTA){
+            p->quanta_used = 0;
+            yield();
+          }
+        }
       }
       yield();
     }
