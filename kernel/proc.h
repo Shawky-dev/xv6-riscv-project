@@ -105,12 +105,14 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 
+
   uint creation_time;          // Ticks when process was created
   uint exit_time;              // Tick when the process exited
   uint arrival_time;           //Tick where the process switched form xstate -> runnable
   uint run_time;               // How long the process has run
 
   uint quanta_used;         // Number of quanta used for round robin scheduling
+  uint priority;               //priority of the process
 };
 
 struct procinfo{
@@ -128,6 +130,7 @@ struct procinfo{
 // schedular constants to set the scheduling mode
 #define SCHED_ROUND_ROBIN 0
 #define SCHED_FCFS        1
+#define PRIORITY          2
 
 extern int sched_mode;  // Declare global scheduler mode
 

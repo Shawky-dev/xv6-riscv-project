@@ -29,3 +29,5 @@
 #define SYS_shutdown 28
 #define SYS_getprocindex 29
 #define SYS_schedstats  30
+#define SYS_setpriority 31
+#define SYS_setsched    32
