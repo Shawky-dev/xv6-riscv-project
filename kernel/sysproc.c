@@ -55,15 +55,15 @@ sys_setpriority(void)
 {
   int priority;
   argint(0, &priority);
-  
+
   if(priority < 0 || priority > 20)
     return -1;
-  
+
   struct proc *p = myproc();
   acquire(&p->lock);
   p->priority = priority;
   release(&p->lock);
-  
+
   return 0;
 }
 
@@ -151,4 +151,19 @@ sys_getptable(void)
   argaddr(1, &buffer);
 
   return getptable(nproc, (char *)buffer);
+}
+
+extern int sched_mode;
+
+uint64
+sys_setsched(void)
+{
+  int mode;
+  argint(0, &mode);
+
+  if(mode < 0 || mode > 2)
+    return -1;
+
+  sched_mode = mode;
+  return 0;
 }

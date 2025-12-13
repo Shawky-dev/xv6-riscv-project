@@ -46,3 +46,4 @@ entry("getprocindex");
 entry("shutdown");
 entry("schedstats");
 entry("setpriority");
+entry("setsched");

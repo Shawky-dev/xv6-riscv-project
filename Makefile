@@ -166,6 +166,7 @@ UPROGS=\
 	$U/_uptime\
 	$U/_sleep\
 	$U/_fcfstest\
+	$U/_setsched\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

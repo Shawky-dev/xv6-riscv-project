@@ -17,6 +17,13 @@ struct procinfo
 #define RUNNING 4
 #define ZOMBIE 5
 
+
+// schedular constants to set the scheduling mode
+#define SCHED_ROUND_ROBIN 0
+#define SCHED_FCFS        1
+#define PRIORITY          2
+
+
 // system calls
 int fork(void);
 int exit(int) __attribute__((noreturn));
@@ -72,3 +79,6 @@ int kbdint(void);
 
 //schbench
 int schedstats(void);
+
+//setsched
+int setsched(int mode);
