@@ -46,6 +46,7 @@ int countsyscall(void);
 int getppid(void);
 int getptable(int, struct procinfo *);
 int shutdown(void);
+int setpriority(int);
 
 // ulib.c
 int stat(const char *, struct stat *);

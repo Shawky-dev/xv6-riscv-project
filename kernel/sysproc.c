@@ -50,6 +50,23 @@ sys_schedstats(void)
   return 0;
 }
 
+uint64
+sys_setpriority(void)
+{
+  int priority;
+  argint(0, &priority);
+  
+  if(priority < 0 || priority > 20)
+    return -1;
+  
+  struct proc *p = myproc();
+  acquire(&p->lock);
+  p->priority = priority;
+  release(&p->lock);
+  
+  return 0;
+}
+
 
 uint64
 sys_fork(void)

@@ -177,8 +177,8 @@ found:
   p->creation_time = ticks;
   p->run_time = 0;
   p->exit_time = 0;
-  p->arrival_time = ticks;  // Set arrival_time only once at process creation
-
+  p->arrival_time = ticks;
+  p->priority = 10;
   return p;
 }
 
@@ -498,6 +498,7 @@ int sched_mode = SCHED_FCFS;  // Assign the chosen scheduler here
 struct proc *choose_next_process() {
   struct proc *p;
   struct proc *fcfs_candidate = 0;
+  struct proc *priority_candidate = 0;
 
   if(sched_mode == SCHED_ROUND_ROBIN) {
     for(p = proc; p < &proc[NPROC]; p++) {
@@ -509,16 +510,10 @@ struct proc *choose_next_process() {
     // Find RUNNABLE process with smallest creation_time
     for(p = proc; p < &proc[NPROC]; p++) {
       if (p->state == RUNNABLE) {
-        // Debug: Print what we're considering
-        // UNCOMMENT THESE FOR DEBUGGING:
-        // printf("[FCFS] considering pid=%d ctime=%d\n", p->pid, p->creation_time);
-
         if (fcfs_candidate == 0) {
           fcfs_candidate = p;
-          // printf("[FCFS] first candidate: pid=%d ctime=%d\n", p->pid, p->creation_time);
         }
         else if (p->creation_time < fcfs_candidate->creation_time) {
-          // printf("[FCFS] new candidate: pid=%d ctime=%d (better than pid=%d ctime=%d)\n",p->pid, p->creation_time, fcfs_candidate->pid, fcfs_candidate->creation_time);
           fcfs_candidate = p;
         }
         else if (p->creation_time == fcfs_candidate->creation_time &&
@@ -527,14 +522,30 @@ struct proc *choose_next_process() {
         }
       }
     }
-
-    // Debug: Print what we chose
-    // UNCOMMENT FOR DEBUGGING:
-    // if (fcfs_candidate) {
-    //   printf("[FCFS] chose pid=%d ctime=%d\n", fcfs_candidate->pid, fcfs_candidate->creation_time);
-    // }
-
     return fcfs_candidate;
+  }
+  else if (sched_mode == PRIORITY) {
+    // Find RUNNABLE process with highest priority
+    for(p = proc; p < &proc[NPROC]; p++) {
+      if (p->state == RUNNABLE) {
+        if (priority_candidate == 0) {
+          priority_candidate = p;
+        }
+        else if (p->priority < priority_candidate->priority) {
+          priority_candidate = p;
+        }
+        else if (p->priority == priority_candidate->priority &&
+                 p->creation_time < priority_candidate->creation_time) {
+          priority_candidate = p;
+        }
+        else if (p->priority == priority_candidate->priority &&
+                 p->creation_time == priority_candidate->creation_time &&
+                 p->pid < priority_candidate->pid) {
+          priority_candidate = p;
+        }
+      }
+    }
+    return priority_candidate;
   }
 
   // Add more scheduler types here as needed
