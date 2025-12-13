@@ -13,3 +13,4 @@
 #define MAXPATH      128   // maximum file path name
 #define USERSTACK    1     // user stack pages
 #define CLOCKFREQ    10000000   // ticks per second
+#define QUANTA       5     // default quanta for round robin scheduling

@@ -109,6 +109,8 @@ struct proc {
   uint exit_time;              // Tick when the process exited
   uint arrival_time;           //Tick where the process switched form xstate -> runnable
   uint run_time;               // How long the process has run
+
+  uint quanta_used;         // Number of quanta used for round robin scheduling
 };
 
 struct procinfo{

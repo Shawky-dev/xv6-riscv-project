@@ -176,6 +176,7 @@ found:
 	// initialize new variables here
   p->creation_time = ticks;
   p->run_time = 0;
+  p->quanta_used = 0;
   p->exit_time = 0;
   p->arrival_time = ticks;  // Set arrival_time only once at process creation
 
