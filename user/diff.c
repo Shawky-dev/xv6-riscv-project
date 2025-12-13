@@ -65,10 +65,17 @@ void diff(int fd1, int fd2){
 
 
 int main(int argc, char* argv[]){
-  if (argc != 3 || (argc == 2 && strcmp(argv[1],"?") == 0)) {
-        printf("Usage: diff <file1_path> <file2_path>\n");
-        exit(0);
-    }
+  if((argc == 2 && strcmp(argv[1], "?") == 0))
+  {
+    printf("Usage: diff <file1_path> <file2_path>\n");
+    exit(0);
+  }
+
+  if (argc != 3)
+  {
+    printf("Error: Command takes 2 argument\n");
+    exit(1);
+  }
 
   char* file1 = argv[1],* file2 = argv[2];
   int fd1,fd2;

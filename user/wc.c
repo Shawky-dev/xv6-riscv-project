@@ -48,6 +48,12 @@ void wc(int fd, char *name, int show_l, int show_w, int show_c)
 
 int main(int argc, char *argv[])
 {
+  if((argc == 2 && strcmp(argv[1], "?") == 0))
+  {
+    printf("Usage: wc <flag> <file>\n");
+    exit(0);
+  }
+
   int fd, i;
 
   int first_file_name_arg = 1;
