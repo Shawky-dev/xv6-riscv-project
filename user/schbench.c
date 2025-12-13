@@ -27,6 +27,7 @@ int main(int argc, char *argv[]) {
     else if (pid == 0) {
       // child
       int child_start = uptime();
+      // setpriority(getpid());
       printf("[pid=%d] created at tick %d\n", getpid(), child_start);
 
       for (z = 0; z < steps; z += 1) {

@@ -108,7 +108,7 @@ struct proc {
 
   uint creation_time;          // Ticks when process was created
   uint exit_time;              // Tick when the process exited
-  uint arrival_time;           //Tick where the process switched form xstate -> runnable
+  uint ready_time;           //Tick where the process switched form xstate -> runnable
   uint run_time;               // How long the process has run
 
   uint quanta_used;         // Number of quanta used for round robin scheduling
@@ -131,6 +131,9 @@ struct procinfo{
 #define SCHED_ROUND_ROBIN 0
 #define SCHED_FCFS        1
 #define PRIORITY          2
+#define SCHED_MY_FCFS     3
+#define PRIORITY_PID      4
+
 
 extern int sched_mode;  // Declare global scheduler mode
 

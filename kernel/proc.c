@@ -178,8 +178,7 @@ found:
   p->run_time = 0;
   p->quanta_used = 0;
   p->exit_time = 0;
-  p->arrival_time = ticks;
-  p->priority = 10;
+  p->priority = ticks % 10;
   return p;
 }
 
@@ -287,6 +286,7 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
+  p->ready_time = ticks;
 
   release(&p->lock);
 }
@@ -357,6 +357,7 @@ fork(void)
 
   acquire(&np->lock);
   np->state = RUNNABLE;
+  np->ready_time = ticks;
   release(&np->lock);
 
   return pid;
@@ -503,12 +504,14 @@ struct proc *choose_next_process() {
 
   if(sched_mode == SCHED_ROUND_ROBIN)
   {
+
     for(p = proc; p < &proc[NPROC]; p++) {
       if (p->state == RUNNABLE)
         return p;
     }
   }
-  else if (sched_mode == SCHED_FCFS) {
+  else if (sched_mode == SCHED_FCFS ) {
+
     // Find RUNNABLE process with smallest creation_time
     for(p = proc; p < &proc[NPROC]; p++) {
       if (p->state == RUNNABLE) {
@@ -526,6 +529,25 @@ struct proc *choose_next_process() {
     }
     return fcfs_candidate;
   }
+  else if (sched_mode == SCHED_MY_FCFS ) {
+
+    // Find RUNNABLE process with smallest ready_time
+    for(p = proc; p < &proc[NPROC]; p++) {
+      if (p->state == RUNNABLE) {
+        if (fcfs_candidate == 0) {
+          fcfs_candidate = p;
+        }
+        else if (p->ready_time < fcfs_candidate->ready_time) {
+          fcfs_candidate = p;
+        }
+        else if (p->ready_time == fcfs_candidate->ready_time &&
+                 p->pid < fcfs_candidate->pid) {
+          fcfs_candidate = p;
+        }
+      }
+    }
+    return fcfs_candidate;
+  }
   else if (sched_mode == PRIORITY) {
     // Find RUNNABLE process with highest priority
     for(p = proc; p < &proc[NPROC]; p++) {
@@ -533,16 +555,39 @@ struct proc *choose_next_process() {
         if (priority_candidate == 0) {
           priority_candidate = p;
         }
-        else if (p->priority < priority_candidate->priority) {
+        else if (p->priority > priority_candidate->priority) {
           priority_candidate = p;
         }
         else if (p->priority == priority_candidate->priority &&
-                 p->creation_time < priority_candidate->creation_time) {
+                 p->creation_time > priority_candidate->creation_time) {
           priority_candidate = p;
         }
         else if (p->priority == priority_candidate->priority &&
                  p->creation_time == priority_candidate->creation_time &&
-                 p->pid < priority_candidate->pid) {
+                 p->pid > priority_candidate->pid) {
+          priority_candidate = p;
+        }
+      }
+    }
+    return priority_candidate;
+  }
+  else if (sched_mode == PRIORITY_PID) {
+    // Find RUNNABLE process with highest priority
+    for(p = proc; p < &proc[NPROC]; p++) {
+      if (p->state == RUNNABLE) {
+        if (priority_candidate == 0) {
+          priority_candidate = p;
+        }
+        else if (p->pid > priority_candidate->pid) {
+          priority_candidate = p;
+        }
+        else if (p->pid == priority_candidate->pid &&
+                 p->creation_time > priority_candidate->creation_time) {
+          priority_candidate = p;
+        }
+        else if (p->pid == priority_candidate->pid &&
+                 p->creation_time == priority_candidate->creation_time &&
+                 p->pid > priority_candidate->pid) {
           priority_candidate = p;
         }
       }
@@ -678,6 +723,7 @@ yield(void)
   struct proc *p = myproc();
   acquire(&p->lock);
   p->state = RUNNABLE;
+  // p->ready_time = ticks;
   sched();
   release(&p->lock);
 }
@@ -748,7 +794,7 @@ void wakeup(void *chan)
       acquire(&p->lock);
       if(p->state == SLEEPING && p->chan == chan) {
         p->state = RUNNABLE;
-
+        p->ready_time = ticks;
         // DEBUG: Uncomment to see when processes wake
         // printf("[wakeup] pid=%d ctime=%d now RUNNABLE\n", p->pid, p->creation_time);
       }
@@ -772,7 +818,7 @@ kill(int pid)
       if(p->state == SLEEPING){
         // Wake process from sleep().
         p->state = RUNNABLE;
-        // Remove: p->arrival_time = ticks;  (strict FCFS doesn't reset on kill/wakeup)
+        p->ready_time = ticks;
       }
       release(&p->lock);
       return 0;

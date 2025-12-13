@@ -22,6 +22,9 @@ struct procinfo
 #define SCHED_ROUND_ROBIN 0
 #define SCHED_FCFS        1
 #define PRIORITY          2
+#define SCHED_MY_FCFS     3
+#define PRIORITY_PID      4
+
 
 
 // system calls

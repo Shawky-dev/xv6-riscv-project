@@ -161,7 +161,7 @@ sys_setsched(void)
   int mode;
   argint(0, &mode);
 
-  if(mode < 0 || mode > 2)
+  if(mode < 0 || mode > 3)
     return -1;
 
   sched_mode = mode;

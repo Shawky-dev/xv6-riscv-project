@@ -8,6 +8,7 @@ int main(int argc, char *argv[]) {
     printf("  0 - Round Robin\n");
     printf("  1 - FCFS \n");
     printf("  2 - Priority\n");
+    printf("  3 - My_FCFS\n");
     exit(1);
   }
 
@@ -28,9 +29,13 @@ int main(int argc, char *argv[]) {
        result = setsched(PRIORITY);
        mode_name = "Priority";
       break;
+    case 3:
+       result = setsched(SCHED_MY_FCFS);
+       mode_name = "MY_FCFS";
+      break;
     default:
       printf("Invalid sch_mode number: %d\n", sch_mode);
-      printf("Valid sch_mode : 0, 1, 2\n");
+      printf("Valid sch_mode : 0, 1, 2, 3\n");
       exit(1);
   }
 
