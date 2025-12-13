@@ -47,3 +47,4 @@ entry("shutdown");
 entry("schedstats");
 entry("setpriority");
 entry("setsched");
+entry("getpriority");

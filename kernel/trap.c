@@ -77,22 +77,31 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-    if(which_dev == 2){   // timer interrupt
-      struct proc *p = myproc();
-      if(p && p->state == RUNNING)
-      {
-        p->run_time++;
-        p->quanta_used++;
-        if(sched_mode == SCHED_ROUND_ROBIN){
-          if(p->quanta_used >= QUANTA){
-            p->quanta_used = 0;
-            yield();
-          }
+  if(which_dev == 2){   // timer interrupt
+    struct proc *p = myproc();
+    if(p && p->state == RUNNING)
+    {
+      // Note: run_time is updated in update_time() called from clockintr()
+      p->quanta_used++;
+
+      if(sched_mode == SCHED_ROUND_ROBIN){
+        // Round robin: yield after quantum expires
+        if(p->quanta_used >= QUANTA){
+          p->quanta_used = 0;
+          yield();
         }
       }
-      yield(); 
-    }
+      else if(sched_mode == PRIORITY || sched_mode == PRIORITY_PID){
+        // Priority scheduling: always yield to check for higher priority process
+        // This makes it preemptive - scheduler will pick the highest priority
+        yield();
+      }
+      else if(sched_mode == SCHED_FCFS || sched_mode == SCHED_MY_FCFS){
+        // FCFS: yield on quantum to allow parent to reap children
 
+      }
+    }
+  }
 
   usertrapret();
 }

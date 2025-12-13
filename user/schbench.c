@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
       // child
       int child_start = uptime();
       // setpriority(getpid());
-      printf("[pid=%d] created at tick %d\n", getpid(), child_start);
+      printf("[pid=%d] created at tick %d, priority=%d\n", getpid(), child_start, getpriority());
 
       for (z = 0; z < steps; z += 1) {
          memmove(buffer_dst, buffer_src, 1024);

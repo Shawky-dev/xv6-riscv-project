@@ -22,6 +22,12 @@ sys_getpid(void)
 }
 
 uint64
+sys_getpriority(void)
+{
+  return myproc()->priority;
+}
+
+uint64
 sys_getprocindex(void)
 {
   return getprocindex();

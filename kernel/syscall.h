@@ -31,3 +31,4 @@
 #define SYS_schedstats  30
 #define SYS_setpriority 31
 #define SYS_setsched    32
+#define SYS_getpriority 33

@@ -57,6 +57,7 @@ int getppid(void);
 int getptable(int, struct procinfo *);
 int shutdown(void);
 int setpriority(int);
+int getpriority(void);
 
 // ulib.c
 int stat(const char *, struct stat *);

@@ -621,6 +621,19 @@ scheduler(void)
     // processes are waiting.
     intr_on();
 
+    // if(sched_mode == PRIORITY && cpuid() != 0) { // make single core only
+    //   asm volatile("wfi");
+    //   continue;
+    // }
+    // if(sched_mode == SCHED_FCFS && cpuid() != 0) { // make single core only
+    //   asm volatile("wfi");
+    //   continue;
+    // }
+    // if(sched_mode == SCHED_MY_FCFS && cpuid() != 0) { // make single core only
+    //   asm volatile("wfi");
+    //   continue;
+    // }
+
     int found = 0;
 
     p = choose_next_process();
